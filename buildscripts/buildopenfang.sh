@@ -1,8 +1,10 @@
 #!/bin/sh
+set -e
+
+REVISION_HASH=$(shell git rev-parse --quiet --short HEAD); \
+
 
 TAG=rc05_01
-
-set -e
 
 CPW=$(pwd)
 
@@ -10,18 +12,20 @@ DIR=_build
 [ -d $DIR ] || { printf '%s does not exist!\n' "$DIR"; mkdir $DIR; }
 
 date=$(date +"%Y-%m-%d %H:%M")
-#ID="($(git rev-parse HEAD)) $date"
 ID="$(git describe --tags)"
 SHORTID=$(git rev-parse --short HEAD)
 
 echo "$ID" > fs/opt/version
 
+# Copy the root filesystem into the _build directory
 cp fs $DIR/ -r;
 
 sed -i "s/VERSION=.*/VERSION=\"$date\"/g" $DIR/fs/opt/autoupdate.sh
 sed -i "s/TAG=.*/TAG=\"$TAG\"/g" $DIR/fs/opt/autoupdate.sh
 sed -i "s/ID=.*/ID=\"$SHORTID\"/g" $DIR/fs/opt/autoupdate.sh
 
+# If the first argument to this shell script is recording the timestamp just
+# do the timestamp and quit
 [ "$1" = "stamp" ] && { exit 0; }
 
 cd $DIR
@@ -46,8 +50,8 @@ cp "$CPW"/config/uClibc-ng.config ./package/uclibc
 
 [ -d "dl" ] || { mkdir dl; }
 
-cp ../../kernel-3.10.14.tar.xz dl/
-cp ../../uboot-v2013.07.tar.xz dl/
+cp ../../legacy_src/kernel-3.10.14.tar.xz dl/
+cp ../../legacy_src/uboot-v2013.07.tar.xz dl/
 
 WDIR=$CPW/$DIR/buildroot-$BUILDROOT_VERSION
 
@@ -69,8 +73,6 @@ cp "$CPW"/patches/python/019-force-internal-hash-if-ssl-disabled.patch "$WDIR"/p
 # copy custom openfang packages to buildroot directory
 rm -r "$WDIR"/package/ffmpeg # use updated package version instead
 rm -r "$WDIR"/package/libtirpc # use updated package version instead
-#rm -r "$WDIR"/package/python # use updated package version instead
-#rm -r "$WDIR"/package/uclibc # use updated package version instead
 cp "$CPW"/buildroot/* . -rf
 
 make

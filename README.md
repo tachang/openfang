@@ -1,5 +1,7 @@
-# openfang
-The openfang is a bootloader, kernel and toolchain for devices using Ingenic T10 and T20 SOC.
+# OpenFang
+
+OpenFang is a bootloader, kernel and toolchain for devices using Ingenic T10 and T20 SOC.
+
 
 ## Overview
 
@@ -21,6 +23,26 @@ Ingenic T20X (128Mb DDR) | &nbsp;
 If you have a device with a Ingenic T10 SOC, consider using for now https://github.com/EliasKotlyar/Xiaomi-Dafang-Hacks
 
 If you have a classic XiaoFang with a ARM-Processor, consider using https://github.com/samtap/fang-hacks
+
+## Installation and Usage
+
+Download the latest firmware release, format an SDCard as FAT32 and put it as the only file
+in the root directory as `demo.bin`.
+
+
+
+
+
+
+## Development
+
+
+### Requirements
+
+Docker and docker-compose
+
+
+
 
 
 ## How to install openfang

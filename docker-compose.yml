@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  builder:
+    build: .
+    image: tachang/openfang-buildenv
+    environment:
+       EXAMPLE: development
+    volumes:
+      - .:/openfang
