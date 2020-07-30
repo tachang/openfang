@@ -1,10 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
-REVISION_HASH=$(shell git rev-parse --quiet --short HEAD); \
-
-
-TAG=rc05_01
+REVISION_HASH=$(git rev-parse --quiet --short HEAD); \
 
 CPW=$(pwd)
 
