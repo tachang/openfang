@@ -2,9 +2,17 @@ version: "3"
 
 services:
   builder:
-    build: .
     image: tachang/openfang-buildenv
     environment:
-       EXAMPLE: development
+      EXAMPLE: development
     volumes:
-      - .:/openfang
+      - "./legacy_src:/openfang/legacy_src"
+      - "./patches:/openfang/patches"
+      - "./config:/openfang/config"
+      - "./buildscripts:/openfang/buildscripts"
+      - "./sharedfiles:/sharedfiles"
+      #- "./config/buildroot.config:/openfang/_build/buildroot-2016.02/.config"
+      #- "./config/busybox.config:/openfang/_build/buildroot-2016.02/package/busybox/busybox.config"
+      #- "./config/uClibc-ng.config:/openfang/_build/buildroot-2016.02/package/uclibc/uClibc-ng.config"
+    ports:
+      - "69:69/udp"

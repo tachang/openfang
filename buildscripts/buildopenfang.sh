@@ -1,56 +1,38 @@
 #!/bin/bash
 set -e
 
-REVISION_HASH=$(git rev-parse --quiet --short HEAD); \
+CPW="/openfang"
+echo "Current directory is $CPW"
 
-CPW=$(pwd)
-
-DIR=_build
-[ -d $DIR ] || { printf '%s does not exist!\n' "$DIR"; mkdir $DIR; }
+DIR=/openfang/_build
+mkdir -p $DIR
 
 date=$(date +"%Y-%m-%d %H:%M")
-ID="$(git describe --tags)"
-SHORTID=$(git rev-parse --short HEAD)
 
-echo "$ID" > fs/opt/version
+echo "$ID" > /openfang/fs/opt/version
 
-# Copy the root filesystem into the _build directory
-cp fs $DIR/ -r;
 
-sed -i "s/VERSION=.*/VERSION=\"$date\"/g" $DIR/fs/opt/autoupdate.sh
-sed -i "s/TAG=.*/TAG=\"$TAG\"/g" $DIR/fs/opt/autoupdate.sh
-sed -i "s/ID=.*/ID=\"$SHORTID\"/g" $DIR/fs/opt/autoupdate.sh
+# sed -i "s/VERSION=.*/VERSION=\"$date\"/g" $DIR/fs/opt/autoupdate.sh
+# sed -i "s/TAG=.*/TAG=\"$TAG\"/g" $DIR/fs/opt/autoupdate.sh
+# sed -i "s/ID=.*/ID=\"$SHORTID\"/g" $DIR/fs/opt/autoupdate.sh
 
 # If the first argument to this shell script is recording the timestamp just
 # do the timestamp and quit
-[ "$1" = "stamp" ] && { exit 0; }
+# [ "$1" = "stamp" ] && { exit 0; }
 
 cd $DIR
 
 BUILDROOT_VERSION=2016.02
 
-[ -d "buildroot-$BUILDROOT_VERSION" ] || {
-wget https://buildroot.org/downloads/buildroot-$BUILDROOT_VERSION.tar.gz;
-tar xvf buildroot-$BUILDROOT_VERSION.tar.gz;
-rm buildroot-$BUILDROOT_VERSION.tar.gz;
-cd buildroot-$BUILDROOT_VERSION
-patch -p1 < "$CPW"/patches/add_fp_no_fused_madd.patch
-cd ..
-}
 
-cd buildroot-$BUILDROOT_VERSION
 
-# update config files
-cp "$CPW"/config/buildroot.config ./.config
-cp "$CPW"/config/busybox.config ./package/busybox
-cp "$CPW"/config/uClibc-ng.config ./package/uclibc
 
 [ -d "dl" ] || { mkdir dl; }
 
 cp ../../legacy_src/kernel-3.10.14.tar.xz dl/
 cp ../../legacy_src/uboot-v2013.07.tar.xz dl/
 
-WDIR=$CPW/$DIR/buildroot-$BUILDROOT_VERSION
+WDIR=/openfang/_build/buildroot-$BUILDROOT_VERSION
 
 # Patch buildroot if gcc >= 5
 #
@@ -92,9 +74,9 @@ make uboot
 
 # constructs release with git hash label
 echo "Compressing toolchain..."
-tar -c -C "$WDIR"/output/host --transform s/./mipsel-ingenic-linux-uclibc/ --checkpoint=.1000 .  | xz --best > "$CPW"/toolchain-$SHORTID.tar.xz
+tar -c -C "$WDIR"/output/host --transform s/./mipsel-ingenic-linux-uclibc/ --checkpoint=.1000 .  | xz --best > "$CPW"/toolchain.tar.xz
 echo "Compressing rootfs images..."
-tar -c -C "$WDIR"/output/images --transform s/./openfang-images/ --checkpoint=.1000 . | xz --best > "$CPW"/images-$SHORTID.tar.xz
+tar -c -C "$WDIR"/output/images --transform s/./openfang-images/ --checkpoint=.1000 . | xz --best > "$CPW"/images.tar.xz
 echo "Build completed successfully."
 
 

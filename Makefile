@@ -2,13 +2,9 @@
 
 REVISION_HASH := $(shell git rev-parse --quiet --short HEAD)
 
-
-
-
-release:
-	mkdir -p _build
+release:	
 	$(info Creating new firmware release: openfang_${REVISION_HASH}.bin)
-	buildscripts/buildopenfang.sh
 
-rootfs:
-	
+build:
+	docker build -t tachang/openfang-buildenv .
+
