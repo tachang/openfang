@@ -1,6 +1,8 @@
 ### How does the openfang distribution work?
+
 The openfang distribution consists of two parts:
 1. The custom U-Boot that alters the original firmware bootloader to boot from a microsd-card. This part does not contain any custom software, its just allows us to boot from the microsd-card. You only have to do this once.
+
 2. The ROOTFS, which contains the custom software. You will have to install them onto your microsd-card after you completed step 1. You can modify this part easily by changing the files on the microsd-card. 
 
 ### Does the openfang contain an RTSP-Server?

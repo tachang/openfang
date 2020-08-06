@@ -15,6 +15,7 @@ IMAGES=${1:-$DEFAULT_IMAGE_DIR}
 # Put the kernel image on the tftp server
 cp $IMAGES/uImage.lzma /var/lib/tftpboot
 
+rm -rf /sharedfiles/rootfs
 mkdir -p /sharedfiles/rootfs
 cp $IMAGES/rootfs.tar /sharedfiles/rootfs
 cd /sharedfiles/rootfs

@@ -39,7 +39,7 @@ in the root directory as `demo.bin`.
 
 ### Requirements
 
-Docker and docker-compose
+Docker and docker-compose.
 
 
 

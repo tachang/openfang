@@ -8,3 +8,5 @@ release:
 build:
 	docker build -t tachang/openfang-buildenv .
 
+syncrootfs:
+	rsync -vr /src/overlayfs_dafang/etc/ /sharedfiles/rootfs/etc/

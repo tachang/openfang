@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+# Start video and camera
+#
+
+case "$1" in
+  start)
+	echo "Adding necessary camera modules"
+	modprobe sinfo
+	modprobe tx-isp isp_clk=100000000
+	;;
+  stop)
+	;;
+  restart|reload)
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?

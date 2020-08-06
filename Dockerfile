@@ -55,4 +55,7 @@ WORKDIR /openfang
 RUN apt install -y nfs-kernel-server
 RUN apt install -y tftpd-hpa
 
+# Copy over custom packages such as v4l2rtspserver
+RUN cp -r custompackages/package/* /openfang/_build/buildroot-2016.02/package/
+
 ENTRYPOINT ["tail", "-f", "/dev/null"]
